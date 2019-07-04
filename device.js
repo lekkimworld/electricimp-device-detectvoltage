@@ -5,7 +5,7 @@
 i2c <- hardware.i2c89;
 spi <- null;
 led <- null;
-doLog <- false;
+doLog <- true;
 
 // configure onboard LED
 spi = hardware.spi257;
@@ -20,7 +20,7 @@ function serverLog(msg) {
 
 // configure pin
 function pin5Changed() {
-    
+    serverLog("Pin 5 changed - is now: " + hardware.pin5.read());
 }
 hardware.pin5.configure(DIGITAL_IN_PULLDOWN, pin5Changed);
 
@@ -38,12 +38,11 @@ function ledOff() {
 
 function loop() {
     local state = hardware.pin5.read();
+    serverLog("Pin 5 read - is now: " + hardware.pin5.read());
     if (state == 1) {
-        // The button is released
         serverLog("On");
         ledOn();
     } else {
-        // The button is pressed
         serverLog("Off");
         ledOff();
     }
@@ -55,3 +54,4 @@ function loop() {
 // Start the loop
 loop();
 ledSet([0,0,255]);
+serverLog("Started...");
